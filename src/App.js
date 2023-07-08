@@ -1,25 +1,39 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <LoadData></LoadData>
     </div>
   );
+}
+function LoadData() {
+  const [comments, setComments] = useState([])
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/comments')
+      .then(res => res.json())
+      .then(data => setComments(data))
+  }, [])
+  return (
+    <div>
+      <h1>Load Data</h1>
+      <h2>{comments.length}</h2>
+      {
+        comments.map(comment => <Comment name={comment.email} id={comment.id} body={comment.body}></Comment>)
+      }
+    </div >
+  )
+}
+function Comment(props) {
+  return (
+    <div>
+      <h2>Email:{props.name}</h2>
+      <h3>Id: {props.id}</h3>
+      <p>{props.body}</p>
+    </div>
+  )
 }
 
 export default App;
